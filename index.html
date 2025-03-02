@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Futuristic Option Risk Calculator</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Link to the manifest -->
+  <link rel="manifest" href="manifest.json">
   <!-- Include Chart.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -14,7 +16,7 @@
   </header>
   
   <div class="container">
-    <!-- Model Selection (Glass Panel) -->
+    <!-- Model Selection Section -->
     <section class="model-section glass-panel">
       <h2>Choose Your Model</h2>
       <p>Select a model below to calculate your trading risk parameters.</p>
@@ -26,7 +28,7 @@
       </select>
     </section>
     
-    <!-- Simple Model Section (Glass Panel) -->
+    <!-- Simple Model Section -->
     <section id="simpleSection" class="model-section glass-panel">
       <h3>Simple Model</h3>
       <form id="simpleForm">
@@ -42,7 +44,7 @@
         <label for="s_tdays">Days Till Expiration (T_days):</label>
         <input type="number" id="s_tdays" step="1" value="30" required>
         
-        <!-- k provided for reference only -->
+        <!-- k is provided for reference only -->
         <label for="s_k">Risk/Reward Ratio (k) [ref]:</label>
         <input type="number" id="s_k" step="0.1" value="3" required>
         
@@ -51,7 +53,7 @@
       <div class="result" id="simpleResult"></div>
     </section>
     
-    <!-- Advanced Model Section (Glass Panel) -->
+    <!-- Advanced Model Section -->
     <section id="advancedSection" class="model-section glass-panel" style="display:none;">
       <h3>Advanced Model</h3>
       <form id="advancedForm">
@@ -90,7 +92,7 @@
       <div class="result" id="advancedResult"></div>
     </section>
     
-    <!-- Custom (Weighted) Model Section (Glass Panel) -->
+    <!-- Custom (Weighted) Model Section -->
     <section id="customSection" class="model-section glass-panel" style="display:none;">
       <h3>Custom (Weighted) Model</h3>
       <form id="customForm">
@@ -189,7 +191,7 @@
             <span class="weightValue" id="w_ms_val">1</span>
           </div>
         </div>
-        <!-- Custom multipliers -->
+        <!-- Custom multipliers for Stop Loss and Take Profit -->
         <div class="form-row">
           <label for="c_slMult">Stop Loss Multiplier:</label>
           <input type="number" id="c_slMult" step="0.1" value="1" required>
@@ -220,7 +222,16 @@
     </section>
   </div>
   
-  <!-- Load scripts -->
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
+  
+  <!-- Load our scripts: model calculations and chart functions -->
   <script src="script.js"></script>
   <script src="chart.js"></script>
 </body>
