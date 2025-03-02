@@ -24,10 +24,20 @@ header {
   align-items: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #fff;
+header .logo {
+  width: 50px;
+  height: 50px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-right select {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 header button {
   padding: 8px 15px;
@@ -66,22 +76,21 @@ header button:hover {
   color: #fff;
 }
 
-/* Form rows and inputs */
-.form-row {
-  margin-bottom: 15px;
+/* Form grid: two-column layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.form-item {
   display: flex;
   flex-direction: column;
 }
-.input-with-weight {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
+.full-width {
+  grid-column: 1 / -1;
 }
-.input-with-weight label {
-  flex-basis: 100%;
-  color: #fff;
-}
+
+/* Input styling */
 input[type="number"],
 select {
   padding: 8px;
@@ -101,7 +110,7 @@ select:focus {
 .weightContainer {
   display: flex;
   align-items: center;
-  margin-left: auto;
+  margin-top: 5px;
 }
 .weightContainer label {
   font-weight: bold;
@@ -109,7 +118,8 @@ select:focus {
   color: #fff;
 }
 .weightContainer input[type="range"] {
-  width: 100px;
+  width: 100%;
+  max-width: 100px;
   margin-right: 5px;
 }
 .weightValue {
@@ -118,7 +128,7 @@ select:focus {
   color: #fff;
 }
 
-/* Button styling with microinteractions */
+/* Button styling */
 button {
   padding: 8px 15px;
   border: none;
@@ -157,10 +167,39 @@ button:hover {
   margin: 20px auto;
 }
 
-/* Responsive adjustments */
-@media (max-width: 800px) {
+/* Mobile-first adjustments */
+@media (max-width: 600px) {
+  body {
+    font-size: 16px;
+  }
+  
   .container {
-    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .model-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+  }
+  
+  input[type="number"], select {
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+  
+  .chart-container.small-chart {
+    max-width: 100%;
+    margin: 15px auto;
+  }
+  
+  /* Optionally, make section headers tappable for collapsing (requires extra JS) */
+  .model-section h3 {
+    cursor: pointer;
   }
 }
 
