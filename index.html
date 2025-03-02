@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Futuristic Option Risk Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Include Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Futuristic Option Risk Calculator</h1>
+    <button id="themeToggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+  </header>
+  
+  <div class="container">
+    <!-- Model Selection (Glass Panel) -->
+    <section class="model-section glass-panel">
+      <h2>Choose Your Model</h2>
+      <p>Select a model below to calculate your trading risk parameters.</p>
+      <label for="modelSelect">Model:</label>
+      <select id="modelSelect" onchange="toggleSection()">
+        <option value="simple">Simple Model</option>
+        <option value="advanced">Advanced Model</option>
+        <option value="custom">Custom (Weighted) Model</option>
+      </select>
+    </section>
+    
+    <!-- Simple Model Section (Glass Panel) -->
+    <section id="simpleSection" class="model-section glass-panel">
+      <h3>Simple Model</h3>
+      <form id="simpleForm">
+        <label for="s_price">Option Price (P):</label>
+        <input type="number" id="s_price" step="0.01" value="5" required>
+        
+        <label for="s_delta">Delta (Δ):</label>
+        <input type="number" id="s_delta" step="0.01" value="0.5" required>
+        
+        <label for="s_atr">ATR (Average True Range):</label>
+        <input type="number" id="s_atr" step="0.01" value="2" required>
+        
+        <label for="s_tdays">Days Till Expiration (T_days):</label>
+        <input type="number" id="s_tdays" step="1" value="30" required>
+        
+        <!-- k provided for reference only -->
+        <label for="s_k">Risk/Reward Ratio (k) [ref]:</label>
+        <input type="number" id="s_k" step="0.1" value="3" required>
+        
+        <button type="button" onclick="calculateSimple()">Calculate Simple Model</button>
+      </form>
+      <div class="result" id="simpleResult"></div>
+    </section>
+    
+    <!-- Advanced Model Section (Glass Panel) -->
+    <section id="advancedSection" class="model-section glass-panel" style="display:none;">
+      <h3>Advanced Model</h3>
+      <form id="advancedForm">
+        <label for="a_price">Option Price (P):</label>
+        <input type="number" id="a_price" step="0.01" value="5" required>
+        
+        <label for="a_delta">Delta (Δ):</label>
+        <input type="number" id="a_delta" step="0.01" value="0.5" required>
+        
+        <label for="a_theta">Absolute Theta (|Θ|):</label>
+        <input type="number" id="a_theta" step="0.01" value="0.04" required>
+        
+        <label for="a_iv">Implied Volatility (IV, %):</label>
+        <input type="number" id="a_iv" step="0.1" value="30" required>
+        
+        <label for="a_atr">ATR (Average True Range):</label>
+        <input type="number" id="a_atr" step="0.01" value="2" required>
+        
+        <label for="a_ms">Market Sentiment (MS, 0-100):</label>
+        <input type="number" id="a_ms" step="1" value="50" required>
+        
+        <label for="a_stock">Stock Price (S):</label>
+        <input type="number" id="a_stock" step="0.01" value="50" required>
+        
+        <label for="a_tdays">Days Till Expiration (T_days):</label>
+        <input type="number" id="a_tdays" step="1" value="30" required>
+        
+        <label for="a_oi">Open Interest (OI):</label>
+        <input type="number" id="a_oi" step="1" value="100" required>
+        
+        <label for="a_contracts">Number of Contracts:</label>
+        <input type="number" id="a_contracts" step="1" value="1" required>
+        
+        <button type="button" onclick="calculateAdvanced()">Calculate Advanced Model</button>
+      </form>
+      <div class="result" id="advancedResult"></div>
+    </section>
+    
+    <!-- Custom (Weighted) Model Section (Glass Panel) -->
+    <section id="customSection" class="model-section glass-panel" style="display:none;">
+      <h3>Custom (Weighted) Model</h3>
+      <form id="customForm">
+        <!-- Standard inputs (same as Advanced) -->
+        <div class="form-row">
+          <label for="c_price">Option Price (P):</label>
+          <input type="number" id="c_price" step="0.01" value="5" required>
+        </div>
+        <div class="form-row">
+          <label for="c_theta">Absolute Theta (|Θ|):</label>
+          <input type="number" id="c_theta" step="0.01" value="0.04" required>
+        </div>
+        <div class="form-row">
+          <label for="c_iv">Implied Volatility (IV, %):</label>
+          <input type="number" id="c_iv" step="0.1" value="30" required>
+        </div>
+        <div class="form-row">
+          <label for="c_contracts">Number of Contracts:</label>
+          <input type="number" id="c_contracts" step="1" value="1" required>
+        </div>
+        
+        <!-- Weighted inputs with sliders -->
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_delta">Delta (Δ):</label>
+            <input type="number" id="c_delta" step="0.01" value="0.5" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_delta">Wt:</label>
+            <input type="range" id="w_delta" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_delta_val').innerText = this.value; updateSensitivityChart();">
+            <span class="weightValue" id="w_delta_val">1</span>
+          </div>
+        </div>
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_atr">ATR (Average True Range):</label>
+            <input type="number" id="c_atr" step="0.01" value="2" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_atr">Wt:</label>
+            <input type="range" id="w_atr" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_atr_val').innerText = this.value;">
+            <span class="weightValue" id="w_atr_val">1</span>
+          </div>
+        </div>
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_stock">Stock Price (S):</label>
+            <input type="number" id="c_stock" step="0.01" value="50" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_ratio">Wt:</label>
+            <input type="range" id="w_ratio" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_ratio_val').innerText = this.value;">
+            <span class="weightValue" id="w_ratio_val">1</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="c_optionPrice">Option Price for Ratio (P):</label>
+          <input type="number" id="c_optionPrice" step="0.01" value="5" required>
+        </div>
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_oi">Open Interest (OI):</label>
+            <input type="number" id="c_oi" step="1" value="100" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_oi">Wt:</label>
+            <input type="range" id="w_oi" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_oi_val').innerText = this.value;">
+            <span class="weightValue" id="w_oi_val">1</span>
+          </div>
+        </div>
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_tdays">Days Till Expiration (T_days):</label>
+            <input type="number" id="c_tdays" step="1" value="30" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_tdays">Wt:</label>
+            <input type="range" id="w_tdays" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_tdays_val').innerText = this.value;">
+            <span class="weightValue" id="w_tdays_val">1</span>
+          </div>
+        </div>
+        <div class="form-row input-with-weight">
+          <div>
+            <label for="c_ms">Market Sentiment (MS, 0–100):</label>
+            <input type="number" id="c_ms" step="1" value="50" required>
+          </div>
+          <div class="weightContainer">
+            <label for="w_ms">Wt:</label>
+            <input type="range" id="w_ms" min="0.1" max="3" step="0.1" value="1"
+                   oninput="document.getElementById('w_ms_val').innerText = this.value;">
+            <span class="weightValue" id="w_ms_val">1</span>
+          </div>
+        </div>
+        <!-- Custom multipliers -->
+        <div class="form-row">
+          <label for="c_slMult">Stop Loss Multiplier:</label>
+          <input type="number" id="c_slMult" step="0.1" value="1" required>
+        </div>
+        <div class="form-row">
+          <label for="c_tpMult">Take Profit Multiplier:</label>
+          <input type="number" id="c_tpMult" step="0.1" value="1" required>
+        </div>
+        <button type="button" onclick="calculateCustom()">Calculate Custom Model</button>
+      </form>
+      <div class="result" id="customResult"></div>
+      <!-- Sensitivity Chart for Custom Model -->
+      <div class="chart-container">
+        <h4>Sensitivity Chart (Delta Weight vs. Q_custom)</h4>
+        <canvas id="sensitivityChart"></canvas>
+      </div>
+    </section>
+    
+    <!-- Summary Chart Section -->
+    <section class="model-section">
+      <h3>Summary Chart</h3>
+      <p>
+        This chart shows the computed Take Profit (green) and Stop Loss (red) levels along with a Worst-Case decay curve (yellow) versus Days Till Expiration.
+      </p>
+      <div class="chart-container small-chart">
+        <canvas id="summaryChart"></canvas>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Load scripts -->
+  <script src="script.js"></script>
+  <script src="chart.js"></script>
+</body>
+</html>

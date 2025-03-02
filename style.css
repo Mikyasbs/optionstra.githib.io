@@ -1,0 +1,186 @@
+/* Animated gradient background for a futuristic look */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  color: #eee;
+  transition: background 0.3s, color 0.3s;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #fff;
+}
+header button {
+  padding: 8px 15px;
+  border: none;
+  background: #0077ff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+header button:hover {
+  transform: scale(1.05);
+  background: #005fcc;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Glassmorphism panels for sections */
+.model-section {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.model-section h2,
+.model-section h3 {
+  margin-top: 0;
+  color: #fff;
+}
+
+/* Form rows and inputs */
+.form-row {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.input-with-weight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.input-with-weight label {
+  flex-basis: 100%;
+  color: #fff;
+}
+input[type="number"],
+select {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-top: 5px;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+input[type="number"]:focus,
+select:focus {
+  box-shadow: 0 0 8px rgba(0, 119, 255, 0.5);
+}
+
+/* Weight slider container */
+.weightContainer {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+.weightContainer label {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #fff;
+}
+.weightContainer input[type="range"] {
+  width: 100px;
+  margin-right: 5px;
+}
+.weightValue {
+  width: 30px;
+  text-align: center;
+  color: #fff;
+}
+
+/* Button styling with microinteractions */
+button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background: #0077ff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+button:hover {
+  transform: scale(1.05);
+  background: #005fcc;
+}
+
+/* Result panel styling */
+.result {
+  margin-top: 10px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Chart container styling */
+.chart-container {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+.chart-container.small-chart {
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+/* Dark mode adjustments */
+body.dark {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #ddd;
+}
+body.dark header {
+  background: rgba(0, 0, 0, 0.7);
+}
+body.dark .model-section {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+body.dark .result {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+body.dark .chart-container {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+}
