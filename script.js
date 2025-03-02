@@ -50,7 +50,6 @@ function calculateSimple() {
   const T_days = parseFloat(document.getElementById('s_tdays').value);
   
   const riskFactor = delta * atr;
-  // Fewer days increases risk.
   const T_factor = 1 / (1 + Math.exp((T_days - 30) / 5));
   const riskMetric = (riskFactor / P) * T_factor;
   
