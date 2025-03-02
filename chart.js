@@ -6,8 +6,8 @@
      - Red: Computed Stop Loss (horizontal)
      - Green: Computed Take Profit (horizontal)
      - Yellow: Worst-case decay curve.
-   For Simple model: worst-case is linear decay from P to 0.
-   For Advanced/Custom: worst-case decay uses theta:
+   For Simple: worst-case is linear from P to 0.
+   For Advanced/Custom: worst-case uses theta:
      Worst(t) = P * [1 - (t/T_days)^α], where α = 1 + (θ/100).
 */
 function updateSummaryChart(P, T_days, stopLoss, takeProfit, theta, modelType) {
@@ -82,7 +82,7 @@ function updateSummaryChart(P, T_days, stopLoss, takeProfit, theta, modelType) {
 }
 
 /* Sensitivity Chart for Custom Model.
-   This chart plots how varying Delta Weight (w_delta) affects Q_custom.
+   This chart plots how varying the Delta Weight (w_delta) affects Q_custom.
 */
 function updateSensitivityChart() {
   const P = parseFloat(document.getElementById('c_price').value) || 1;
